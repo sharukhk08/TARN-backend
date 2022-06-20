@@ -6,7 +6,7 @@ const routes = require("./routes");
 
 // CONNECT MONGO DB HERE
 const DB =
-  "mongodb+srv://sharukh:sharukh@cluster0.wuqad.mongodb.net/task-node-react";
+  "mongodb+srv://sharukh:sharukh@cluster0.wuqad.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose
   .connect(DB, {

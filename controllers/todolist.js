@@ -1,6 +1,6 @@
 const addTodoSchema = require("../schema/addTodo");
 
-const gettodolist = async (res) => {
+const gettodolist = async (req, res) => {
   try {
     const todolist = await addTodoSchema.find({});
 
@@ -9,6 +9,7 @@ const gettodolist = async (res) => {
       todos: todolist.reverse(),
     });
   } catch (err) {
+    console.log(err);
     return res.status(404).json({
       status: "error",
       message: err,
