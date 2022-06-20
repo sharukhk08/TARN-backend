@@ -30,7 +30,6 @@ app.use(
 );
 
 // HERE WE IMPORTS HERE ALL API ROUTES FROM ROUTER FILE
-// const routes = require("./routes/router");
 
 app.use("/api/v1", routes);
 
