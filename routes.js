@@ -1,8 +1,8 @@
 const Router = require("express").Router();
-const addTodo = require("./models/addTodo");
-const todoList = require("./models/todolist");
-const completetodo = require("./models/completetodo");
-const deletetodo = require("./models/deletetodo");
+const addTodo = require("./controllers/addTodo");
+const todoList = require("./controllers/todolist");
+const completetodo = require("./controllers/completetodo");
+const deletetodo = require("./controllers/deletetodo");
 
 Router.post("/add/todo", addTodo);
 Router.get("/todo", todoList);
