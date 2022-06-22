@@ -19,16 +19,16 @@ mongoose
     console.log(err, "No connection");
   }); // connect to mongo db
 
-
-
 const corsOptions = {
-  origin: 'https://task-node-react.herokuapp.com',
+  origin: "https://task-node-react.herokuapp.com",
   credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200
-}
-app.use(cors({
-  corsOptions
-}));
+  optionSuccessStatus: 200,
+};
+app.use(
+  cors({
+    corsOptions,
+  })
+);
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -36,15 +36,9 @@ app.use(
   })
 );
 
-
 // HERE WE IMPORTS HERE ALL API ROUTES FROM ROUTER FILE
 
 app.use("/api/v1", routes);
-
-// app.get("/api/v1", (req, res) => {
-//   res.send("Welcome to Node.js world my First Api!");
-//   console.log("Home api run");
-// });
 
 const PORT = process.env.PORT || 4000;
 

@@ -5,7 +5,9 @@ const completetodo = require("./controllers/completetodo");
 const deletetodo = require("./controllers/deletetodo");
 const login = require("./controllers/login");
 const signup = require("./controllers/signup");
+const checkauth = require("./controllers/checkauth");
 
+Router.post("/me", checkauth);
 Router.post("/login", login);
 Router.post("/signup", signup);
 Router.post("/add/todo", addTodo);

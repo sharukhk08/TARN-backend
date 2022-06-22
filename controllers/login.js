@@ -11,7 +11,6 @@ const login = async (req, res) => {
     password: req.body.password,
   };
   const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-  console.log(accessToken);
   //   function authenticateToken(req, res, next) {
   //     const authHeader = req.headers["authorization"];
   //     const token = authHeader && authHeader.split(" ")[1];
