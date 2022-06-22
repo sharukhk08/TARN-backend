@@ -1,7 +1,6 @@
 const addTodoSchema = require("../schema/addTodo");
 
 const deletetodo = async (req, res) => {
-  console.log(req.params.id);
   try {
     const todolist = await addTodoSchema.find({});
     await Promise.all(

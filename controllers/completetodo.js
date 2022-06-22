@@ -3,10 +3,8 @@ const mongoose = require("mongoose");
 
 // Create a new story
 const completetodo = async (req, res) => {
-  console.log(req.params.id);
   try {
     const todolist = await addTodoSchema.find({});
-    console.log(todolist, "todolist");
     await Promise.all(
       todolist.map(async (todo) => {
         if (todo._id == req.params.id) {

@@ -5,13 +5,12 @@ const login = async (req, res) => {
     const userExixts = await signupSchema.findOne({
       email: req.body.email,
     });
-
     const user = {
       email: req.body.email,
       password: req.body.password,
     };
     const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-
+    console.log(accessToken);
     function authenticateToken(req, res, next) {
       const authHeader = req.headers["authorization"];
       const token = authHeader && authHeader.split(" ")[1];
@@ -41,7 +40,11 @@ const login = async (req, res) => {
         message: "user not found",
       });
     }
-  } catch {}
+  } catch {
+    return res.status(404).json({
+      message: "Failed to login!",
+    });
+  }
 };
 
 module.exports = [login];

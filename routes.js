@@ -14,7 +14,6 @@ Router.put("/complete/todo/:id", completetodo);
 Router.delete("/delete/todo/:id", deletetodo);
 
 Router.get("/", (req, res) => {
-  console.log(req.body);
   res.send("Welcome to Node.js world my First Api!");
 });
 
