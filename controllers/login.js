@@ -1,48 +1,44 @@
+require("dotenv").config();
 const signupSchema = require("../schema/signup");
+const jwt = require("jsonwebtoken");
 
 const login = async (req, res) => {
-  try {
-    const userExixts = await signupSchema.findOne({
-      email: req.body.email,
-    });
-    const user = {
-      email: req.body.email,
-      password: req.body.password,
-    };
-    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-    console.log(accessToken);
-    function authenticateToken(req, res, next) {
-      const authHeader = req.headers["authorization"];
-      const token = authHeader && authHeader.split(" ")[1];
-      if (token == null) return res.sendStatus(401);
+  const userExixts = await signupSchema.findOne({
+    email: req.body.email,
+  });
+  const user = {
+    email: req.body.email,
+    password: req.body.password,
+  };
+  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+  console.log(accessToken);
+  //   function authenticateToken(req, res, next) {
+  //     const authHeader = req.headers["authorization"];
+  //     const token = authHeader && authHeader.split(" ")[1];
+  //     if (token == null) return res.sendStatus(401);
 
-      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
-        req.user = user;
-        next();
+  //     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+  //       if (err) return res.sendStatus(403);
+  //       req.user = user;
+  //       next();
+  //     });
+  //   }
+
+  if (userExixts) {
+    if (userExixts.password === req.body.password) {
+      res.status(200).json({
+        message: "login success",
+        user: userExixts,
+        accessToken,
       });
-    }
-
-    if (userExixts) {
-      if (userExixts.password === req.body.password) {
-        res.status(200).json({
-          message: "login success",
-          user: userExixts,
-          accessToken,
-        });
-      } else {
-        res.status(400).json({
-          message: "wrong password",
-        });
-      }
     } else {
-      res.status(404).json({
-        message: "user not found",
+      res.status(400).json({
+        message: "wrong password",
       });
     }
-  } catch {
-    return res.status(404).json({
-      message: "Failed to login!",
+  } else {
+    res.status(404).json({
+      message: "user not found",
     });
   }
 };
