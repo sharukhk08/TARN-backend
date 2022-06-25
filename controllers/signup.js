@@ -88,7 +88,7 @@ const generateToken = (req, res) => {
 
   console.log(payload, "payload");
 
-  const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+  const token = jwt.sign(payload, `${process.env.ACCESS_TOKEN_SECRET}`, {
     expiresIn: "1d",
   });
 

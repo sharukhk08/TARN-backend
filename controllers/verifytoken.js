@@ -6,7 +6,7 @@ module.exports = {
       if (token) {
         return jwt.verify(
           token,
-          process.env.ACCESS_TOKEN_SECRET,
+          `${process.env.ACCESS_TOKEN_SECRET}`,
           (err, decode) => {
             if (err) {
               return [error, "fail to verify token"];

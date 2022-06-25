@@ -8,7 +8,7 @@ module.exports = (req, res) => {
     title,
     completed,
     created_at,
-    updated_at
+    updated_at 
   } = req.body;
   const todoObj = {
     title: title,

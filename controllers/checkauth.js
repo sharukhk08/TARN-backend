@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const signupSchema = require("../schema/signup");
+const addTodoSchema = require("../schema/addTodo");
 
 // check if token is valid then send user details
 const checkauth = (req, res, next) => {
@@ -22,7 +23,16 @@ const checkauth = (req, res, next) => {
     });
   };
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user, next) => {
+  const getTodoListNumberByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+      addTodoSchema.find({ email: email }, (err, todoList) => {
+        if (err) reject(err);
+        resolve(todoList);
+      });
+    });
+  };
+
+  jwt.verify(token, `${process.env.ACCESS_TOKEN_SECRET}`, (err, user, next) => {
     if (err) return res.sendStatus(403);
     getUserDetailsByEmail(user.email).then((user) => {
       res.status(200).json({

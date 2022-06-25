@@ -10,7 +10,7 @@ const authentication = (req, res, next) => {
   console.log(req.body, "in authentication");
   console.log(req.param, "in authentication");
   if (token) {
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decode) => {
+    jwt.verify(token, `${process.env.ACCESS_TOKEN_SECRET}`, (err, decode) => {
       if (err) {
         console.log(err);
         res.status(404).json({

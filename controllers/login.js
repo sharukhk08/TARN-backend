@@ -1,45 +1,70 @@
-require("dotenv").config();
-const signupSchema = require("../schema/signup");
 const jwt = require("jsonwebtoken");
+const signupSchema = require("../schema/signup");
+const util = require("../utility/utils");
+const mongoose = require("mongoose");
 
-const login = async (req, res) => {
-  const userExixts = await signupSchema.findOne({
-    email: req.body.email,
-  });
-  const user = {
-    email: req.body.email,
-    password: req.body.password,
-  };
-  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-  //   function authenticateToken(req, res, next) {
-  //     const authHeader = req.headers["authorization"];
-  //     const token = authHeader && authHeader.split(" ")[1];
-  //     if (token == null) return res.sendStatus(401);
-
-  //     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-  //       if (err) return res.sendStatus(403);
-  //       req.user = user;
-  //       next();
-  //     });
-  //   }
-
-  if (userExixts) {
-    if (userExixts.password === req.body.password) {
-      res.status(200).json({
-        message: "login success",
-        user: userExixts,
-        accessToken,
-      });
-    } else {
-      res.status(400).json({
-        message: "wrong password",
-      });
+const logIn = (req, res, next) => {
+  signupSchema.find(
+    { "local.email": req.body.email.toLowerCase() },
+    (err, user) => {
+      if (err) {
+        console.log(err);
+        return res
+          .status(500)
+          .json({ success: false, isError: true, error: err });
+      }
+      if (!user || user.length === 0) {
+        return res
+          .status(404)
+          .json({ success: false, message: "invalid credentials" });
+      }
+      req.data = {};
+      req.data.user = JSON.parse(JSON.stringify(user[0]));
+      next();
     }
-  } else {
-    res.status(404).json({
-      message: "user not found",
-    });
-  }
+  );
 };
 
-module.exports = [login];
+const comparePassword = (req, res, next) => {
+  util.checkHashPassword(
+    req.body.password,
+    req.data.user.local.password,
+    (err, isMatch) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ success: false, isError: true, error: err });
+      }
+      if (isMatch) {
+        next();
+      } else {
+        return res.status(401).json({
+          success: false,
+          isError: true,
+          message: "You have entered wrong email or password",
+        });
+      }
+    }
+  );
+};
+
+const generateToken = (req, res) => {
+  const payload = {
+    email: req.data.user.local.email,
+    _id: req.data.user._id,
+    id: req.data.user.id,
+    tokenDuration: "90d",
+  };
+  const token = authConfig.generateToken(payload);
+
+  delete req.data.user.local.password;
+
+  res.status(200).json({
+    success: true,
+    message: "You are loged in successfully",
+    token,
+    user: req.data.user,
+  });
+};
+
+module.exports = [logIn, comparePassword, generateToken];
