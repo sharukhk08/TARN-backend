@@ -1,11 +1,16 @@
 const jwt = require("jsonwebtoken");
-const config = require("config");
 
 const authentication = (req, res, next) => {
+  console.log(req.headers);
   const token =
-    req.headers["x-access-token"] || req.body.token || req.param.token;
+    req.headers["tarn-front-token"] ||
+    req.body.token ||
+    req.param.token ||
+    req.headers.token;
+  console.log(req.body, "in authentication");
+  console.log(req.param, "in authentication");
   if (token) {
-    jwt.verify(token, config.secert, (err, decode) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decode) => {
       if (err) {
         console.log(err);
         res.status(404).json({

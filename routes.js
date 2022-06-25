@@ -6,10 +6,12 @@ const deletetodo = require("./controllers/deletetodo");
 const login = require("./controllers/login");
 const signup = require("./controllers/signup");
 const checkauth = require("./controllers/checkauth");
+const authentication = require("./controllers/authentication");
 
-Router.post("/me", checkauth);
 Router.post("/login", login);
 Router.post("/signup", signup);
+Router.use(authentication);
+Router.post("/me", checkauth);
 Router.post("/add/todo", addTodo);
 Router.get("/todo", todoList);
 Router.put("/complete/todo/:id", completetodo);
