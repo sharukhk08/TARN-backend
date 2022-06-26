@@ -17,7 +17,6 @@ const checkValidation = (req, res, next) => {
 };
 
 const checkExistingUser = (req, res, next) => {
-  console.log(req.body);
   signupSchema.find(
     {
       email: req.body.email.toLowerCase(),
@@ -31,7 +30,7 @@ const checkExistingUser = (req, res, next) => {
           error: err,
         });
       }
-      console.log(user, "user");
+
       if (user.length > 0) {
         return res.status(401).json({
           success: false,
@@ -54,7 +53,7 @@ const generateHashPassword = (req, res, next) => {
     }
     req.data = {};
     req.data.hashPassword = hashPassword;
-    console.log(req.data.hashPassword, "hashPassword");
+
     next();
   });
 };
@@ -65,7 +64,7 @@ const createUser = (req, res, next) => {
     name: req.body.name,
     password: req.body.password,
   };
-  console.log(payload, "payload");
+
   signupSchema.create(payload, (err, user) => {
     if (err) {
       return res.status(500).json({
@@ -75,8 +74,6 @@ const createUser = (req, res, next) => {
       });
     }
     req.data.createdUser = JSON.parse(JSON.stringify(user));
-    console.log(req.data.createdUser, "req.data.createdUser");
-    console.log(req.data, "req.data.createdUser");
     next();
   });
 };
@@ -86,13 +83,10 @@ const generateToken = (req, res) => {
     _id: req.data.createdUser._id,
   };
 
-  console.log(payload, "payload");
-
   const token = jwt.sign(payload, `${process.env.ACCESS_TOKEN_SECRET}`, {
     expiresIn: "1d",
   });
 
-  console.log(token, "token");
   res.status(200).json({
     success: true,
     message: "You are registered successfully",

@@ -10,6 +10,11 @@ const addTodoSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
+
+  userId: {
+    type: String,
+    required: true,
+  },
   created_at: {
     type: Date,
     required: true,

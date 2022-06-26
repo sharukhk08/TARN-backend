@@ -4,25 +4,23 @@ const util = require("../utility/utils");
 const mongoose = require("mongoose");
 
 const logIn = (req, res, next) => {
-  signupSchema.find(
-    { "local.email": req.body.email.toLowerCase() },
-    (err, user) => {
-      if (err) {
-        console.log(err);
-        return res
-          .status(500)
-          .json({ success: false, isError: true, error: err });
-      }
-      if (!user || user.length === 0) {
-        return res
-          .status(404)
-          .json({ success: false, message: "invalid credentials" });
-      }
-      req.data = {};
-      req.data.user = JSON.parse(JSON.stringify(user[0]));
-      next();
+  signupSchema.find({ email: req.body.email.toLowerCase() }, (err, user) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ success: false, isError: true, error: err });
     }
-  );
+    // console.log(user[0], "-----user");
+    if (!user || user.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "invalid credentials" });
+    }
+    req.data = {};
+
+    req.data.user = JSON.parse(JSON.stringify(user[0]));
+    next();
+  });
 };
 
 const comparePassword = (req, res, next) => {
