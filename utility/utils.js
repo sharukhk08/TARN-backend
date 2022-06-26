@@ -7,3 +7,9 @@ module.exports.hash = (password, callback) => {
     });
   });
 };
+
+module.exports.checkHashPassword = (password, hash, next) => {
+  bcrypt.compare(password, hash, (err, res) => {
+    next(err, res);
+  });
+};

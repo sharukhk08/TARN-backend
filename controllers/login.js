@@ -24,9 +24,11 @@ const logIn = (req, res, next) => {
 };
 
 const comparePassword = (req, res, next) => {
+  console.log(req.body.password, "req.body.password");
+  console.log(req.data.user.password, "req.body.user");
   util.checkHashPassword(
     req.body.password,
-    req.data.user.local.password,
+    req.data.user.password,
     (err, isMatch) => {
       if (err) {
         return res
