@@ -10,7 +10,6 @@ const logIn = (req, res, next) => {
         .status(500)
         .json({ success: false, isError: true, error: err });
     }
-    // console.log(user[0], "-----user");
     if (!user || user.length === 0) {
       return res
         .status(404)
@@ -24,18 +23,16 @@ const logIn = (req, res, next) => {
 };
 
 const comparePassword = (req, res, next) => {
-  console.log(req.body.password, "req.body.password");
-  console.log(req.data.user.password, "req.body.user");
   util.checkHashPassword(
     req.body.password,
     req.data.user.password,
     (err, isMatch) => {
       if (err) {
+        console.log(err);
         return res
           .status(500)
           .json({ success: false, isError: true, error: err });
       }
-      console.log(isMatch, "isMatch");
       if (isMatch) {
         next();
       } else {
