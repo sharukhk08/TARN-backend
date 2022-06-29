@@ -62,7 +62,7 @@ const createUser = (req, res, next) => {
   const payload = {
     email: req.body.email,
     name: req.body.name,
-    password: req.body.password,
+    password: req.data.hashPassword,
   };
 
   signupSchema.create(payload, (err, user) => {

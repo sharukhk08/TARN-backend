@@ -35,6 +35,7 @@ const comparePassword = (req, res, next) => {
           .status(500)
           .json({ success: false, isError: true, error: err });
       }
+      console.log(isMatch, "isMatch");
       if (isMatch) {
         next();
       } else {
@@ -50,14 +51,15 @@ const comparePassword = (req, res, next) => {
 
 const generateToken = (req, res) => {
   const payload = {
-    email: req.data.user.local.email,
+    email: req.data.user.email,
     _id: req.data.user._id,
     id: req.data.user.id,
-    tokenDuration: "90d",
   };
-  const token = authConfig.generateToken(payload);
+  const token = jwt.sign(payload, `${process.env.ACCESS_TOKEN_SECRET}`, {
+    expiresIn: "1d",
+  });
 
-  delete req.data.user.local.password;
+  // delete req.data.user.password;
 
   res.status(200).json({
     success: true,
